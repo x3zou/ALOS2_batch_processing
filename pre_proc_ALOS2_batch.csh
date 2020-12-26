@@ -60,6 +60,7 @@ foreach ledfile (`cat raw/$1`)
          echo "No file raw/"$imgfile
          exit
         endif
+        @ nf = $nf + 1
     end
 end
 
