@@ -6,10 +6,15 @@
 
 if ($#argv != 3) then
   echo ""
-  echo "align_ALOS2_swath.csh  align.in  n_swath  config.alos.txt"
-  echo "The first line of align.in is the supermaster"
-  echo "IMG-HH-ALOS2129992850-161019-WBDR1.1__D"
-  echo "..."
+  echo "Align stack of SLCs to supermaster scene"
+  echo ""
+  echo "Usage: align_ALOS2_swath.csh  align.in  n_swath  config_file"
+  echo ""
+  echo "Inputs: "
+  echo "  align.in    - IMG filestem corresponding to supermaster scene"
+  echo "    Ex: IMG-HH-ALOS2129992850-161019-WBDR1.1__D"
+  echo "  n_swath     - number of swath to process"
+  echo "  config_file - batch configuration file (example in repository)"
   echo ""
   exit 1
 endif
@@ -19,6 +24,7 @@ set subswath = $2
 set conf = $3
 set iono = `grep correct_iono $conf | awk '{print $3}'`
 
+# Move into subswath directory
 if (-f F$subswath) then
    echo "F$subswath exists"
 else
