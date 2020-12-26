@@ -55,7 +55,7 @@ foreach ledfile (`cat raw/$1`)
 
     set nf = $n1
     while ($nf <= $n2)
-        set imgfile = "IMG-HH-"$stem"-F"$n
+        set imgfile = "IMG-HH-"$stem"-F"$nf
         if (! -f raw/$imgfile) then
          echo "No file raw/"$imgfile
          exit
