@@ -1,5 +1,6 @@
 #!/bin/tcsh -f
 # Modified by Zeyu Jin on Jan. 2019
+# Modified by Ellis Vavra on Dec. 2020
 # need to link all the original IMG and LED files
 # plus the LED.list
 
@@ -7,10 +8,27 @@ alias rm 'rm -f'
 unset noclobber
 
 if ($#argv < 2) then
+  echo "Form stack of SLCs from catalog of ALOS-2 data."
   echo ""
   echo "Usage: preprocess_alos2_batch.csh LED.list config_file [n1] [n2]"
+  echo "  Run from top-level processing directory."
   echo ""
+  echo "Inputs:"
+  echo "  LED.list    - list of LED files for each scene to process"
+  echo "  config_file - batch configuration file (example in repository)"
+  echo "  (n1, n2)    - subswaths to be processed (n2 >= n1). Default is 1-5."
+  echo ""
+
   exit 1
+endif
+
+# Specify subswaths
+if ($#argv == 4) then
+  set n1 = $3
+  set n2 = $4
+else 
+  set n1 = 1
+  set n2 = 5
 endif
 
 # make sure the files exist
@@ -20,32 +38,42 @@ if (! -f $2) then
 endif
 
 foreach ledfile (`cat raw/$1`)
-   if (! -f raw/$ledfile) then
-	  echo "No file raw/"$ledfile
-	  exit
-   endif
-   
-   set stem = `echo $ledfile|cut -c 5-`
-   foreach n ( 1 2 3 4 5 )
-	  set imgfile = "IMG-HH-"$stem"-F"$n
-      if (! -f raw/$imgfile) then
-		 echo "No file raw/"$imgfile
-		 exit
-	  endif
-   end
+    if (! -f raw/$ledfile) then
+      echo "No file raw/"$ledfile
+      exit
+    endif
+
+    set stem = `echo $ledfile|cut -c 5-`
+
+   # foreach n ( 1 2 3 4 5 )
+   #    set imgfile = "IMG-HH-"$stem"-F"$n
+   #    if (! -f raw/$imgfile) then
+   #       echo "No file raw/"$imgfile
+   #       exit
+   #    endif
+   # end
+
+    set nf = $n1
+    while ($nf <= $n2)
+        set imgfile = "IMG-HH-"$stem"-F"$n
+        if (! -f raw/$imgfile) then
+         echo "No file raw/"$imgfile
+         exit
+        endif
+    end
 end
 
 echo "Pre-checking files finished!"
 unset ledfile imgfile
 
 # read parameters from configure file
-if ($#argv == 4) then
-  set n1 = $3
-  set n2 = $4
-else 
-  set n1 = 1
-  set n2 = 5
-endif
+# if ($#argv == 4) then
+#   set n1 = $3
+#   set n2 = $4
+# else 
+#   set n1 = 1
+#   set n2 = 5
+# endif
 
 set config = $2
 
