@@ -18,6 +18,14 @@ set align_list = $1
 set subswath = $2
 set conf = $3
 set iono = `grep correct_iono $conf | awk '{print $3}'`
+
+if (-f F$subswath) then
+   echo "F$subswath exists"
+else
+   echo "Making F$subswath directory"
+   mkdir -p F$subswath
+endif
+
 cd F$subswath
 cp ../$align_list .
 
