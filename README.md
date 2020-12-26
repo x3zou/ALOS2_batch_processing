@@ -11,7 +11,9 @@
 ```shell
 preproc_alos2_batch_new.csh  LED.list  batch.config  [n1]  [n2]
 # n1 and n2 represent the number of ALOS-2 subswath, n2 >= n1
-# Run from top-level processing directory (parallel to /raw)
+# Run from top-level processing directory
+# LED.list should be in /raw, 
+# batch.config should be in topo-level directory
 ```
 
 ### Step 2: align all slave images to the supermaster image.
@@ -19,6 +21,7 @@ preproc_alos2_batch_new.csh  LED.list  batch.config  [n1]  [n2]
 align_ALOS2_swath.csh  align.in  n_swath  batch.config
 # the first line of align.in represents the supermaster file
 # n_swath represents the number of ALOS-2 subswath
+# align.in should be in top-level directory
 ```
 **In order to merge each subswath using the "merge_batch.csh" later on,
 we upsample each SLC file to enforce each subswath to have the same
