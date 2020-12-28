@@ -1,4 +1,4 @@
-#!/usr/bin/csh -f
+#!/usr/bin/tcsh -f
 #   $Id$
 # written by Zeyu Jin in Feb. 2019 
 
