@@ -1,5 +1,6 @@
 #!/bin/tcsh -f
 # modified by Zeyu Jin on Jan. 2019
+# modified by Ellis Vavra on Dec. 2020
 # align all the slave image to the supermaster
 # due to the precise orbit, all the interferograms
 # could be generated with the reference and repeat images
