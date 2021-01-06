@@ -38,6 +38,7 @@ if ($topo_phase == 1) then
    endif
    cd .. 
    echo "DEM2TOPO_RA.CSH - END"
+
 #
 # shift topo_ra
 #
@@ -56,18 +57,24 @@ if ($topo_phase == 1) then
       echo "OFFSET_TOPO - END"
    else if ($shift_topo == 0) then
       echo "NO TOPO_RA SHIFT "
+      set t2 = `date`
+      echo "dem2topo_ra_swath.csh started on $t1 for F$subswath finished on $t2 "| mail -s "Job finished" evavra@ucsd.edu
    else
       echo "Wrong paramter: shift_topo "$shift_topo
+      set t2 = `date`
+      echo "dem2topo_ra_swath.csh started on $t1 for F$subswath finished on $t2 "| mail -s "Job finished" evavra@ucsd.edu
       exit 1
    endif
 
 else if ($topo_phase == 0) then
    echo "NO TOPO_RA IS SUBSTRACTED"
+   set t2 = `date`
+   echo "dem2topo_ra_swath.csh started on $t1 for F$subswath finished on $t2 "| mail -s "Job finished" evavra@ucsd.edu
 else
    echo "Wrong paramter: topo_phase "$topo_phase
+   set t2 = `date`
+   echo "dem2topo_ra_swath.csh started on $t1 for F$subswath finished on $t2 "| mail -s "Job finished" evavra@ucsd.edu
    exit 1
 endif
 
 cd ..
-set t2 = `date`
-echo "dem2topo_ra_swath.csh started on $t1 for F$subswath finished on $t2 "| mail -s "Job finished" evavra@ucsd.edu
