@@ -49,4 +49,4 @@ mv "intf_"*"F$swath.log" F$swath
 
 set t2 = `date`
 set dir0 = `pwd`
-echo "Job started on $t1 and finished on $t2 at $dir0/F$swath "|mail -s "Job finished" zej011@ucsd.edu
+echo "Job started on $t1 and finished on $t2 at $dir0/F$swath "| mail -s "Job finished" evavra@ucsd.edu

@@ -2,6 +2,8 @@
 #   $Id$
 # written by Zeyu Jin in Feb. 2019 
 
+set t1 = `date`
+
 if ($#argv < 2) then
    echo ""
    echo "Usage: dem2topo_ra_swath.csh subswath config.txt "
@@ -67,3 +69,5 @@ else
 endif
 
 cd ..
+set t2 = `date`
+echo "dem2topo_ra_swath.csh started on $t1 for F$subswath finished on $t2 "| mail -s "Job finished" evavra@ucsd.edu
