@@ -3,7 +3,7 @@
 
 if ($#argv < 3) then
   echo ""
-  echo "Usage: intf_ALOS2_batch_new.csh intf.in batch.config swath Ncores"
+  echo "Usage: intf_ALOS2_batch_firkin.csh intf.in batch.config swath Ncores"
   echo ""
   echo "     Format for intf.in:"
   echo "     reference1_name:repeat1_name"
