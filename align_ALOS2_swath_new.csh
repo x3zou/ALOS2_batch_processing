@@ -9,7 +9,7 @@ if ($#argv != 3) then
   echo ""
   echo "Align stack of SLCs to supermaster scene"
   echo ""
-  echo "Usage: align_ALOS2_swath.csh  align.in  n_swath  config_file"
+  echo "Usage: align_ALOS2_swath_new.csh  align.in  n_swath  config_file"
   echo ""
   echo "Inputs: "
   echo "  align.in    - list of IMG filestems. First scene should correspond to supermaster."
@@ -40,6 +40,7 @@ if ($iono == 1) then
    mkdir -p SLC_L
    mkdir -p SLC_H
 endif
+
 cleanup.csh SLC
 rm -rf SLC_L/*
 rm -rf SLC_H/*
@@ -54,29 +55,53 @@ cd SLC
 cp ../../raw/$master.PRM .
 ln -sf ../../raw/$master.SLC .
 ln -sf ../../raw/$master.LED .
-# upsampling is the key
+
+# # upsampling is the key
+# samp_slc.csh $master 3350 0
+# if ($iono == 1) then
+#    split_spectrum $master.PRM > params1
+#    mv SLCH ../SLC_H/$master.SLC
+#    mv SLCL ../SLC_L/$master.SLC
+# endif
+
+# cd ../SLC_L
+# set wl1 = `grep low_wavelength ../SLC/params1 | awk '{print $3}'`
+# cp ../SLC/$master.PRM .
+# ln -s ../../raw/$master.LED .
+# sed "s/.*wavelength.*/radar_wavelength    = $wl1/g" $master.PRM > tmp
+# mv tmp $master.PRM
+
+# cd ../SLC_H
+# set wh1 = `grep high_wavelength ../SLC/params1 | awk '{print $3}'`
+# cp ../SLC/$master.PRM .
+# ln -s ../../raw/$master.LED .
+# sed "s/.*wavelength.*/radar_wavelength    = $wh1/g" $master.PRM > tmp
+# mv tmp $master.PRM
+
+# cd ..
+
 samp_slc.csh $master 3350 0
 if ($iono == 1) then
    split_spectrum $master.PRM > params1
    mv SLCH ../SLC_H/$master.SLC
    mv SLCL ../SLC_L/$master.SLC
+
+   cd ../SLC_L
+   set wl1 = `grep low_wavelength ../SLC/params1 | awk '{print $3}'`
+   cp ../SLC/$master.PRM .
+   ln -s ../../raw/$master.LED .
+   sed "s/.*wavelength.*/radar_wavelength    = $wl1/g" $master.PRM > tmp
+   mv tmp $master.PRM
+
+   cd ../SLC_H
+   set wh1 = `grep high_wavelength ../SLC/params1 | awk '{print $3}'`
+   cp ../SLC/$master.PRM .
+   ln -s ../../raw/$master.LED .
+   sed "s/.*wavelength.*/radar_wavelength    = $wh1/g" $master.PRM > tmp
+   mv tmp $master.PRM
+
+   cd ..
 endif
-
-cd ../SLC_L
-set wl1 = `grep low_wavelength ../SLC/params1 | awk '{print $3}'`
-cp ../SLC/$master.PRM .
-ln -s ../../raw/$master.LED .
-sed "s/.*wavelength.*/radar_wavelength    = $wl1/g" $master.PRM > tmp
-mv tmp $master.PRM
-
-cd ../SLC_H
-set wh1 = `grep high_wavelength ../SLC/params1 | awk '{print $3}'`
-cp ../SLC/$master.PRM .
-ln -s ../../raw/$master.LED .
-sed "s/.*wavelength.*/radar_wavelength    = $wh1/g" $master.PRM > tmp
-mv tmp $master.PRM
-
-cd ..
 
 # coregister all images to one supermaster
 # sample to the same PRF
