@@ -10,18 +10,25 @@
 ### Step 1: convert the original data (CEOS format) to SLC and LED formats:
 ```shell
 pre_proc_ALOS2_batch.csh  LED.list  batch.config  [n1]  [n2]
-# n1 and n2 represent the number of ALOS-2 subswath, n2 >= n1
+# n1 and n2 represent the range of ALOS-2 subswaths to process (n2 >= n1)
 # Run from top-level processing directory
 # LED.list should be in /raw, 
-# batch.config should be in topo-level directory
+# batch.config should parallel to /raw, /topo, etc.
+
+# This will generate a top-level /SLC directory which contains all of the pre-processed data
+# Run time: ~XX min per scene
 ```
 
 ### Step 2: align all slave images to the supermaster image.
 ```shell
 align_ALOS2_swath.csh  align.in  n_swath  batch.config
-# the first line of align.in represents the supermaster file
-# n_swath represents the number of ALOS-2 subswath
-# align.in should be in top-level directory
+# The first line of align.in should be the supermaster file
+# n_swath is the ALOS-2 subswath to align (must do one at a time)
+# align.in should parallel to /raw, /topo, etc.
+
+# This will generate a new /F[1-5] directory for the subswath being processed. 
+# It will be populated with another /SLC directory which will contain the aligned SLCs 
+
 ```
 **In order to merge each subswath using the "merge_batch.csh" later on,
 we upsample each SLC file to enforce each subswath to have the same
