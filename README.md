@@ -41,34 +41,31 @@ dem2topo_ra_swath.csh  n_swath  batch.config
 ```
 ### Step 4: select interferogram pairs.
 ```
-    Generate list of interferograms to process and baseline plot given baseline table and processing parameters
-    
-    Usage: get_baseline.py prm_file baseline_file
-    
-    INPUT:
-      prm_file - parameter (PRM) file containing date and baseline values for interferogram selection
-      baseline_file - GMTSAR baseline table file
-    
-    OUTPUT:
-      short.dat - list of interferograms in YYYYMMDD_YYYYMMDD format
-        Ex: 20150126_20150607')
-            20150126_20150701')
-            20150126_20150725')
-            20150126_20150818')
-    
-      intf.in - list of interferogram pairs in SLC naming convention, for input into GMTSAR interferogram scripts
-        Ex: S1A20150126_ALL_F1:S1A20150607_ALL_F1
-            S1A20150126_ALL_F1:S1A20150701_ALL_F1
-    
-      Note: subsets of these will be generated which correspond to the selection parameters provided in the prm_file
-        Ex:
-        intf.in.sequential for SEQUENTIAL = True
-        intf.in.skip_2 for Skip = 2
-        intf.in.y2y for Y2Y_INTFS  = True
+get_baseline.py prm_file baseline_file
 
-      baseline_plot.eps - plot of interferograms satisfying baseline constraints
+INPUT:
+  prm_file - parameter (PRM) file containing date and baseline values for interferogram selection
+  baseline_file - GMTSAR baseline table file
+    
+OUTPUT:
+  short.dat - list of interferograms in YYYYMMDD_YYYYMMDD format
+    Ex: 20150126_20150607')
+        20150126_20150701')
+        20150126_20150725')
+        20150126_20150818')
+
+  intf.in - list of interferogram pairs in SLC naming convention, for input into GMTSAR interferogram scripts
+    Ex: S1A20150126_ALL_F1:S1A20150607_ALL_F1
+        S1A20150126_ALL_F1:S1A20150701_ALL_F1
+
+  Note: subsets of these will be generated which correspond to the selection parameters provided in the prm_file
+    Ex:
+    intf.in.sequential for SEQUENTIAL = True
+    intf.in.skip_2 for Skip = 2
+    intf.in.y2y for Y2Y_INTFS  = True
+
+  baseline_plot.eps - plot of interferograms satisfying baseline constraints
 ```
-
 
 ### Step 5: make pairs of interferograms between any two pairs.
 ```shell
@@ -77,6 +74,23 @@ intf_ALOS2_batch_firkin.csh  intf.in  batch.config  start_swath  end_swath  Ncor
 Because ALOS-2 has a better orbit precision and alignment than ALOS-1, we could construct any 
 interferograms between the reference and repeat date of data acquisitions. The phase closure 
 could be as small as zero.
+
+### Optional: cut interferograms
+Depending on study region, you may also want to cut interferograms at this stage. By default, GMTSAR will generate full-swath interferograms and only apply    ```region_cut``` at the unwrapping stage. To cut grd files en-masse after formation, you can use:
+```
+Usage: batch_cut.csh intf_list file_type new_file region
+
+intf_list  - list of interferogram directories
+    e.g.
+    date1_date2
+    date2_date3
+    date3_date4
+    ......
+intf_dir   - path to directory containing interferograms
+file_type  - filestem of product to cut (e.g. phase, phasefilt, corr)
+new_file   - filestem for cut grids
+region     - x_min/x_max/y_min/y_max (e.g. 0/10000/20000/40000
+```
 
 ### Step 6: merge the filtered phase, correlation and mask grid files
 ```shell
