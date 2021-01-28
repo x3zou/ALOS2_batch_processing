@@ -39,8 +39,38 @@ range sampling rate and PRF (azimuth) (using "samp_slc.csh").**
 ``` shell
 dem2topo_ra_swath.csh  n_swath  batch.config
 ```
+### Step 4: select interferogram pairs.
+```
+    Generate list of interferograms to process and baseline plot given baseline table and processing parameters
+    
+    Usage: get_baseline.py prm_file baseline_file
+    
+    INPUT:
+      prm_file - parameter (PRM) file containing date and baseline values for interferogram selection
+      baseline_file - GMTSAR baseline table file
+    
+    OUTPUT:
+      short.dat - list of interferograms in YYYYMMDD_YYYYMMDD format
+        Ex: 20150126_20150607')
+            20150126_20150701')
+            20150126_20150725')
+            20150126_20150818')
+    
+      intf.in - list of interferogram pairs in SLC naming convention, for input into GMTSAR interferogram scripts
+        Ex: S1A20150126_ALL_F1:S1A20150607_ALL_F1
+            S1A20150126_ALL_F1:S1A20150701_ALL_F1
+    
+      Note: subsets of these will be generated which correspond to the selection parameters provided in the prm_file
+        Ex:
+        intf.in.sequential for SEQUENTIAL = True
+        intf.in.skip_2 for Skip = 2
+        intf.in.y2y for Y2Y_INTFS  = True
 
-### Step 4: make pairs of interferograms between any two pairs.
+      baseline_plot.eps - plot of interferograms satisfying baseline constraints
+```
+
+
+### Step 5: make pairs of interferograms between any two pairs.
 ```shell
 intf_ALOS2_batch_firkin.csh  intf.in  batch.config  start_swath  end_swath  Ncores
 ```
@@ -48,7 +78,7 @@ Because ALOS-2 has a better orbit precision and alignment than ALOS-1, we could 
 interferograms between the reference and repeat date of data acquisitions. The phase closure 
 could be as small as zero.
 
-### Step 5: merge the filtered phase, correlation and mask grid files
+### Step 6: merge the filtered phase, correlation and mask grid files
 ```shell
 merge_swath_ALOS2_list.csh  dir.list  dates.run  batch.config
 # this command generate the necessary file list that will be used in merge_batch.csh
@@ -69,7 +99,7 @@ consider two extra factors:**
 1. gmt FLIPUD each topo_ra.grd of each subswath (Because SLC indexs from upper left).
 2. subtract the difference of Earth radius of each subswath.
 
-### Step 6: unwrap each interferogram and geocode them.
+### Step 7: unwrap each interferogram and geocode them.
 ```shell
 unwrap_parallel.csh  dates.run  threshold  Ncores
 # threshold means the coherence threshold of SNAPHU unwrapping 
