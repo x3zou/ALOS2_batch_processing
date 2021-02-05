@@ -60,6 +60,7 @@
     echo $pth"tmp.PRM:"$pth"phasefilt.grd" >> tmp_phaselist
     echo $pth"tmp.PRM:"$pth"corr.grd" >> tmp_corrlist
     echo $pth"tmp.PRM:"$pth"mask.grd" >> tmp_masklist
+    echo $pth"tmp.PRM:"$pth"landmask_ra.grd" >> tmp_landmasklist
   end 
 
   set pth = `awk -F: 'NR==1 {print $1}' $1`
@@ -72,9 +73,11 @@
   head -3 tmp_phaselist > first_phase.txt
   head -3 tmp_corrlist > first_corr.txt
   head -3 tmp_masklist > first_mask.txt
+  head -3 tmp_landmasklist > first_landmask.txt
   merge_swath first_phase.txt first_phase.grd first
   merge_swath first_corr.txt first_corr.grd
   merge_swath first_mask.txt first_mask.grd
+  merge_swath first_landmask.txt first_landmask.grd
 
   # echo "first.PRM:first_phase.grd" > second_phase.txt
   # tail -2 tmp_phaselist >> second_phase.txt
@@ -90,10 +93,13 @@
   tail -1 tmp_corrlist >> second_corr.txt
   echo "first.PRM:first_mask.grd" > second_mask.txt
   tail -1 tmp_masklist >> second_mask.txt
+  echo "first.PRM:first_landmask.grd" > second_landmask.txt
+  tail -1 tmp_landmasklist >> second_landmask.txt
 
   merge_swath second_phase.txt phasefilt.grd $stem
   merge_swath second_corr.txt corr.grd
   merge_swath second_mask.txt mask.grd
+  merge_swath second_landmask.txt landmask_ra.grd
   echo "Merging END"
   echo ""
   rm first* second*
