@@ -32,6 +32,7 @@
   if (-f tmp_phaselist) rm tmp_phaselist
   if (-f tmp_corrlist) rm tmp_corrlist
   if (-f tmp_masklist) rm tmp_masklist
+  if (-f tmp_landmasklist) rm tmp_landmasklist
 
   if (! -f dem.grd ) then
     echo "Please link dem.grd to current folder"
@@ -74,6 +75,7 @@
   head -3 tmp_corrlist > first_corr.txt
   head -3 tmp_masklist > first_mask.txt
   head -3 tmp_landmasklist > first_landmask.txt
+
   merge_swath first_phase.txt first_phase.grd first
   merge_swath first_corr.txt first_corr.grd
   merge_swath first_mask.txt first_mask.grd
@@ -100,6 +102,7 @@
   merge_swath second_corr.txt corr.grd
   merge_swath second_mask.txt mask.grd
   merge_swath second_landmask.txt landmask_ra.grd
+  
   echo "Merging END"
   echo ""
   rm first* second*
@@ -195,4 +198,4 @@
     echo "GEOCODE END"
   endif 
 
-  rm tmp_phaselist tmp_corrlist tmp_masklist *.eps *.bb
+  rm tmp_phaselist tmp_corrlist tmp_masklist tmp_landmasklist *.eps *.bb
