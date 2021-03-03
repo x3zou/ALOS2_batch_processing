@@ -61,7 +61,7 @@
     update_PRM tmp.PRM rshift $rshift
     cd $now_dir
 
-    echo $pth"tmp.PRM:"$pth$file_type".grd" >> tmp_phaselist
+    echo $pth"tmp.PRM:"$pth$file_type".grd" >> tmp_filelist
     # echo $pth"tmp.PRM:"$pth"corr.grd" >> tmp_corrlist
     # echo $pth"tmp.PRM:"$pth"mask.grd" >> tmp_masklist
     # echo $pth"tmp.PRM:"$pth"landmask_ra.grd" >> tmp_landmasklist
@@ -220,4 +220,4 @@
     echo "GEOCODE END"
   endif 
 
-  rm tmp_phaselist tmp_corrlist tmp_masklist tmp_landmasklist *.eps *.bb
+  rm tmp_filelist tmp_phaselist tmp_corrlist tmp_masklist tmp_landmasklist *.eps *.bb
