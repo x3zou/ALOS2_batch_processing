@@ -3,14 +3,15 @@
 #
 #    Xiaohua(Eric) XU, July 7, 2016
 #    Modified by Zeyu Jin, 31, Jan, 2018
+#    Modified by Ellis Vavra March 3, 2021
 #
 # Script for merging 5 subswaths ScanSAR mode interferograms. 
 #
   if ($#argv != 2) then
     echo ""
-    echo "Usage: merge_ScanSAR.csh inputfile config_file"
+    echo "Usage: merge_ScanSAR.csh input_list config_file file_stem"
     echo ""
-    echo "Note: Inputfiles should be as following:"
+    echo "Note: input_list should be as following:"
     echo ""
     echo "      Swath1_Path:Swath1_master.PRM:Swath1_repeat.PRM"
     echo "      Swath2_Path:Swath2_master.PRM:Swath2_repeat.PRM"
@@ -19,12 +20,13 @@
     echo "      (Use the repeat PRM which contains the shift information.)"
     echo "      e.g. ../F1/intf/2015016_2015030/:S1A20151012_134357_F1.PRM"
     echo ""
-    echo "      Make sure under each path, the processed phasefilt.grd, corr.grd and mask.grd exist."
-    echo "      Also make sure the dem.grd is linked. "
+    echo "      file_type should be stem of grd files to be merged (e.g. phase, corr, mask)"
     echo ""
     echo "      config_file is the same one used for processing."
     echo ""
-    echo "Example: merge_ScanSAR.csh filelist batch.config"
+    echo "      Also make sure the dem.grd is linked. "
+    echo""
+    echo "Example: merge_ScanSAR.csh input.list batch.config phasefilt"
     echo ""
     exit 1
   endif
@@ -39,6 +41,7 @@
     exit 1
   endif
 
+  set file_type = $3
   set region_cut = `grep region_cut $2 | awk '{print $3}'`
 
   # Creating inputfiles for merging
@@ -58,54 +61,73 @@
     update_PRM tmp.PRM rshift $rshift
     cd $now_dir
 
-    echo $pth"tmp.PRM:"$pth"phasefilt.grd" >> tmp_phaselist
-    echo $pth"tmp.PRM:"$pth"corr.grd" >> tmp_corrlist
-    echo $pth"tmp.PRM:"$pth"mask.grd" >> tmp_masklist
-    echo $pth"tmp.PRM:"$pth"landmask_ra.grd" >> tmp_landmasklist
+    echo $pth"tmp.PRM:"$pth$file_type".grd" >> tmp_phaselist
+    # echo $pth"tmp.PRM:"$pth"corr.grd" >> tmp_corrlist
+    # echo $pth"tmp.PRM:"$pth"mask.grd" >> tmp_masklist
+    # echo $pth"tmp.PRM:"$pth"landmask_ra.grd" >> tmp_landmasklist
   end 
 
   set pth = `awk -F: 'NR==1 {print $1}' $1`
   set stem = `awk -F: 'NR==1 {print $2}' $1 | awk -F"." '{print $1}'`
   #echo $pth $stem
 
+
+
   ## since ALOS2 has 5 subswaths, need to use merge_swath twice
   echo ""
   echo "Merging START"
-  head -3 tmp_phaselist > first_phase.txt
-  head -3 tmp_corrlist > first_corr.txt
-  head -3 tmp_masklist > first_mask.txt
-  head -3 tmp_landmasklist > first_landmask.txt
+  head -3 tmp_filelist > first_file.txt
 
-  merge_swath first_phase.txt first_phase.grd first
-  merge_swath first_corr.txt first_corr.grd
-  merge_swath first_mask.txt first_mask.grd
-  merge_swath first_landmask.txt first_landmask.grd
-
-  # echo "first.PRM:first_phase.grd" > second_phase.txt
-  # tail -2 tmp_phaselist >> second_phase.txt
-  # echo "first.PRM:first_corr.grd" > second_corr.txt
-  # tail -2 tmp_corrlist >> second_corr.txt
-  # echo "first.PRM:first_mask.grd" > second_mask.txt
-  # tail -2 tmp_masklist >> second_mask.txt
+  merge_swath first_file.txt first_file.grd first
 
   # used for Pamir region (merge 4 subswaths)
-  echo "first.PRM:first_phase.grd" > second_phase.txt
-  tail -1 tmp_phaselist >> second_phase.txt
-  echo "first.PRM:first_corr.grd" > second_corr.txt
-  tail -1 tmp_corrlist >> second_corr.txt
-  echo "first.PRM:first_mask.grd" > second_mask.txt
-  tail -1 tmp_masklist >> second_mask.txt
-  echo "first.PRM:first_landmask.grd" > second_landmask.txt
-  tail -1 tmp_landmasklist >> second_landmask.txt
+  echo "first.PRM:first_file.grd" > second_file.txt
+  tail -1 tmp_filelist >> second_file.txt
 
-  merge_swath second_phase.txt phasefilt.grd $stem
-  merge_swath second_corr.txt corr.grd
-  merge_swath second_mask.txt mask.grd
-  merge_swath second_landmask.txt landmask_ra.grd
+  merge_swath second_file.txt $file_type.grd $stem
   
   echo "Merging END"
   echo ""
   rm first* second*
+
+  # OLD, for multiple files at once
+  # echo ""
+  # echo "Merging START"
+  # head -3 tmp_phaselist > first_phase.txt
+  # # head -3 tmp_corrlist > first_corr.txt
+  # # head -3 tmp_masklist > first_mask.txt
+  # # head -3 tmp_landmasklist > first_landmask.txt
+
+  # merge_swath first_phase.txt first_phase.grd first
+  # # merge_swath first_corr.txt first_corr.grd
+  # # merge_swath first_mask.txt first_mask.grd
+  # # merge_swath first_landmask.txt first_landmask.grd
+
+  # # echo "first.PRM:first_phase.grd" > second_phase.txt
+  # # tail -2 tmp_phaselist >> second_phase.txt
+  # # echo "first.PRM:first_corr.grd" > second_corr.txt
+  # # tail -2 tmp_corrlist >> second_corr.txt
+  # # echo "first.PRM:first_mask.grd" > second_mask.txt
+  # # tail -2 tmp_masklist >> second_mask.txt
+
+  # # used for Pamir region (merge 4 subswaths)
+  # echo "first.PRM:first_phase.grd" > second_phase.txt
+  # tail -1 tmp_phaselist >> second_phase.txt
+  # # echo "first.PRM:first_corr.grd" > second_corr.txt
+  # # tail -1 tmp_corrlist >> second_corr.txt
+  # # echo "first.PRM:first_mask.grd" > second_mask.txt
+  # # tail -1 tmp_masklist >> second_mask.txt
+  # # echo "first.PRM:first_landmask.grd" > second_landmask.txt
+  # # tail -1 tmp_landmasklist >> second_landmask.txt
+
+  # merge_swath second_phase.txt phasefilt.grd $stem
+  # # merge_swath second_corr.txt corr.grd
+  # # merge_swath second_mask.txt mask.grd
+  # # merge_swath second_landmask.txt landmask_ra.grd
+  
+  # echo "Merging END"
+  # echo ""
+  # rm first* second*
 
 #  set iono = `grep correct_iono $2 | awk '{print $3}'`
 #  set skip_iono = `grep iono_skip_est $2 | awk '{print $3}'`

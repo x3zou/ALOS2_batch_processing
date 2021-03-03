@@ -3,6 +3,7 @@
 #
 #    Xiaohua(Eric) XU, July 7, 2016
 #    Modified by Zeyu Jin, Jan 31, 2019
+#    Modified by Ellis Vavra March 3, 2021
 #
 # Script for merging 5 subswaths ScanSAR interferograms and then geocode for a stack of interferograms. 
 #
@@ -10,7 +11,7 @@
 
   if ($#argv != 2) then
     echo ""
-    echo "Usage: merge_batch_five.csh inputfile config_file"
+    echo "Usage: merge_batch_five.csh inputfile config_file file_type"
     echo ""
     echo "Note: Inputfiles should be as following:"
     echo ""
@@ -19,14 +20,15 @@
     echo "      (Use the repeat PRM which contains the shift information.)"
     echo "      e.g. ../F1/intf_all/2015092_2015128/:S1A20150403_ALL_F1.PRM:S1A20150509_ALL_F1.PRM,../F2/intf_all/2015092_2015128/:S1A20150403_ALL_F2.PRM:S1A20150509_ALL_F2.PRM,../F3/intf_all/2015092_2015128/:S1A20150403_ALL_F3.PRM:S1A20150509_ALL_F3.PRM"
     echo ""
-    echo "      Make sure under each path, the processed phasefilt.grd, corr.grd and mask.grd exist."
+    echo "      file_type should be stem of grd files to be merged (e.g. phase, corr, mask)"
+    echo ""
     echo "      Also make sure the dem.grd is linked. "
     echo "      If trans.dat exits, recomputation of projection matrix will not proceed."
     echo "      The master image of firet line should be the super_master."
     echo ""
     echo "      config_file is the same one used for processing."
     echo ""
-    echo "Example: merge_batch.csh filelist batch.config"
+    echo "Example: merge_batch.csh input.list batch.config phasefilt"
     echo ""
     exit 1
   endif
@@ -37,6 +39,7 @@
   endif
 
   set input_file = $1
+  set file_type = $3
   awk 'NR==1{print $0}' $input_file | awk -F, '{for (i=1;i<=NF;i++) print "../"$i}' | awk -F: '{print $1$2}'> tmpm.filelist 
   
   set now_dir = `pwd`
@@ -74,7 +77,7 @@
     ln -s ../$2 .
     rm tmp
     
-    merge_ScanSAR.csh tmp.filelist $2
+    merge_ScanSAR.csh tmp.filelist $2 $file_type
 
     if (! -f ../trans.dat && -f trans.dat) then
       mv trans.dat ../
