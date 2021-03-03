@@ -69,11 +69,11 @@ OUTPUT:
 
 ### Step 5: make pairs of interferograms between any two pairs.
 ```shell
-intf_ALOS2_batch_firkin.csh  intf.in  batch.config  start_swath  end_swath  Ncores
+intf_ALOS2_batch_firkin.csh  intf.in  batch.config  swath  Ncores
 ```
-Because ALOS-2 has a better orbit precision and alignment than ALOS-1, we could construct any 
-interferograms between the reference and repeat date of data acquisitions. The phase closure 
-could be as small as zero.
+NOTE: Do not try to process batch jobs for different swaths at the same time! They both rely on the same ```intf_alos.cmd``` file. Process one swath at a time (increase the number of cores to speed up).
+
+
 
 ### Optional: cut interferograms
 Depending on study region, you may also want to cut interferograms at this stage. By default, GMTSAR will generate full-swath interferograms and only apply    ```region_cut``` at the unwrapping stage. To cut grd files en-masse after formation, you can use:
