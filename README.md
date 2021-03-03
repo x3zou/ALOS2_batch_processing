@@ -103,8 +103,9 @@ merge_swath_ALOS2_list.csh  dir.list  dates.run  batch.config
 # ...
 # dates.run are date pairs between reference and repeat interferograms.
 
-merge_batch_five.csh  inputfile  batch.config
+merge_batch_five.csh  inputfile  batch.config file_type
 # input file is generated from executing merge_swath_ALOS2_list.csh
+# file_type is the file stem of the grd file to be merged (e.g. phasefilt, phaseraw)
 # the merging step would also generate merged "trans.dat" to be used in geocoding.
 ```
 **Merging subswaths of ALOS-2 is similar to merging those of Sentinel-1.
