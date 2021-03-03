@@ -9,7 +9,7 @@
 #
 #
 
-  if ($#argv != 2) then
+  if ($#argv != 3) then
     echo ""
     echo "Usage: merge_batch_five.csh inputfile config_file file_type"
     echo ""

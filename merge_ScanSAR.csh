@@ -7,7 +7,7 @@
 #
 # Script for merging 5 subswaths ScanSAR mode interferograms. 
 #
-  if ($#argv != 2) then
+  if ($#argv != 3) then
     echo ""
     echo "Usage: merge_ScanSAR.csh input_list config_file file_stem"
     echo ""
