@@ -19,6 +19,8 @@ pre_proc_ALOS2_batch.csh  LED.list  batch.config  [n1]  [n2]
 # Run time: ~XX min per scene
 ```
 
+At this time, you may want to check the ```baseline_table.dat``` file to identify the supermaster scene. In this case, you should editmove the selected scene to the first line of the ```LED.list``` and```align.in``` files as well as update your ```batch.config``` file and then repeat Step 1 before proceeding.
+
 ### Step 2: align all slave images to the supermaster image.
 ```shell
 align_ALOS2_swath_new.csh  align.in  n_swath  batch.config
