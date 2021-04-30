@@ -56,7 +56,7 @@ set rep_id = `day2date.csh $str2`
 #    Stale file handle (delete the intf/ but parallel processing others)
 #    cleanup.csh intf  
     echo ""
-    echo "INTF.CSH, FILTER.CSH - START"
+    echo "INTF.CSH, filter_no_rm.csh - START"
     cd intf
     mkdir $ref_id"_"$rep_id
     cd $ref_id"_"$rep_id
@@ -71,22 +71,22 @@ set rep_id = `day2date.csh $str2`
       if ($shift_topo == 1) then
          ln -s ../../topo/topo_shift.grd .
          intf.csh $ref.PRM $rep.PRM -topo topo_shift.grd
-         filter.csh $ref.PRM $rep.PRM $filter $dec $range_dec $azimuth_dec
-##         filter.csh $ref.PRM $rep.PRM $filter $dec
+         filter_no_rm.csh $ref.PRM $rep.PRM $filter $dec $range_dec $azimuth_dec
+##         filter_no_rm.csh $ref.PRM $rep.PRM $filter $dec
       else
          ln -s ../../topo/topo_ra.grd .
          intf.csh $ref.PRM $rep.PRM -topo topo_ra.grd
-         filter.csh $ref.PRM $rep.PRM $filter $dec $range_dec $azimuth_dec
-##         filter.csh $ref.PRM $rep.PRM $filter $dec
+         filter_no_rm.csh $ref.PRM $rep.PRM $filter $dec $range_dec $azimuth_dec
+##         filter_no_rm.csh $ref.PRM $rep.PRM $filter $dec
       endif
     else
        echo "NO TOPOGRAPHIC PHASE REMOVAL PORFORMED"
        intf.csh $ref.PRM $rep.PRM
-       filter.csh $ref.PRM $rep.PRM $filter $dec $range_dec $azimuth_dec
-##       filter.csh $ref.PRM $rep.PRM $filter $dec
+       filter_no_rm.csh $ref.PRM $rep.PRM $filter $dec $range_dec $azimuth_dec
+##       filter_no_rm.csh $ref.PRM $rep.PRM $filter $dec
     endif
     cd ../..
-    echo "INTF.CSH, FILTER.CSH - END"
+    echo "INTF.CSH, filter_no_rm.csh - END"
 
     if ($iono == 1) then
        mkdir -p iono_phase
@@ -113,7 +113,7 @@ set rep_id = `day2date.csh $str2`
       cp ../../../SLC/params* .
       ln -sf ../../../topo/topo_ra.grd .    ## added by Zeyu Jin
       intf.csh $ref.PRM $rep.PRM -topo topo_ra.grd
-      filter.csh $ref.PRM $rep.PRM 500 $dec $new_incx $new_incy
+      filter_no_rm.csh $ref.PRM $rep.PRM 500 $dec $new_incx $new_incy
       cp phase.grd phasefilt.grd
       echo ""
       echo "Generate the topo phase (high band)"
@@ -137,7 +137,7 @@ set rep_id = `day2date.csh $str2`
       cp ../../../SLC/params* .
       ln -sf ../../../topo/topo_ra.grd .   
       intf.csh $ref.PRM $rep.PRM -topo topo_ra.grd
-      filter.csh $ref.PRM $rep.PRM 500 $dec $new_incx $new_incy
+      filter_no_rm.csh $ref.PRM $rep.PRM 500 $dec $new_incx $new_incy
       cp phase.grd phasefilt.grd
       echo ""
       echo "Generate the topo phase (low band)"
@@ -156,7 +156,7 @@ set rep_id = `day2date.csh $str2`
       cp ../../../SLC/$rep.PRM .
       ln -sf ../../../topo/topo_ra.grd .
       intf.csh $ref.PRM $rep.PRM -topo topo_ra.grd
-      filter.csh $ref.PRM $rep.PRM 500 $dec $new_incx $new_incy
+      filter_no_rm.csh $ref.PRM $rep.PRM 500 $dec $new_incx $new_incy
       cp phase.grd phasefilt.grd
       echo ""
       echo "Generate the topo phase (central band)"
