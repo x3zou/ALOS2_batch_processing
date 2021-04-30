@@ -41,7 +41,7 @@ foreach intf (`cat $1`)
    set date1 =  `echo $file1 |awk -F"-" '{print $4}'`
    set date2 =  `echo $file2 |awk -F"-" '{print $4}'`
    set logfile = "intf_"$date1"_"$date2"_F"$swath".log"
-   echo "intf_ALOS2_p2p_new.csh $file1 $file2 $2 $swath >& $logfile" >> intf_alos.cmd
+   echo "intf_ALOS2_p2p_for_batch.csh $file1 $file2 $2 $swath >& $logfile" >> intf_alos.cmd
 end
 
 parallel --jobs $ncores < intf_alos.cmd
