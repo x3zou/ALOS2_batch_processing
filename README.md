@@ -63,8 +63,8 @@ OUTPUT:
   Note: subsets of these will be generated which correspond to the selection parameters provided in the prm_file
     Ex:
     intf.in.sequential for SEQUENTIAL = True
-    intf.in.skip_2 for Skip = 2
-    intf.in.y2y for Y2Y_INTFS  = True
+    intf.in.skip_2 for SKIP           = 2
+    intf.in.y2y for Y2Y_INTFS         = True
 
   baseline_plot.eps - plot of interferograms satisfying baseline constraints
 ```
