@@ -123,8 +123,8 @@ phase.grd: Command: grdmath imagfilt.grd realfilt.grd ATAN2 mask.grd MUL FLIPUD 
 phase.grd: Remark: 
 phase.grd: Pixel node registration used [Cartesian grid]
 phase.grd: Grid file format: nf = GMT netCDF format (32-bit float), CF-1.7
-phase.grd: x_min: 0 x_max: 5772 x_inc: 6 name: x n_columns: **962**
-phase.grd: y_min: 0 y_max: 174132 y_inc: 36 name: y n_rows: 4837
+phase.grd: ```**x_min: 0 x_max: 5772**``` x_inc: 6 name: x n_columns: 962
+phase.grd: ```**y_min: 0 y_max: 174132**``` y_inc: 36 name: y n_rows: 4837
 phase.grd: z_min: -3.14159059525 z_max: 3.14159226418 name: z
 phase.grd: scale_factor: 1 add_offset: 0
 phase.grd: format: classic
