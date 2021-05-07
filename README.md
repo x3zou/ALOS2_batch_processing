@@ -117,7 +117,6 @@ Usage: proj_ll2ra.csh trans.dat phase_ll.grd phase_ra.grd
 Note that this ```trans.dat``` should be from the ```F*/topo``` directories of the target frame.
 
 4. Use ```grdinfo``` to find the bounding coordinates of the template frame in the target coordinate system and pass to ```batch_cut.csh``` as explained above.
-```
 
 
 ### Step 6: merge the filtered phase, correlation and mask grid files
