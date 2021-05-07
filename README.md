@@ -94,6 +94,7 @@ new_file   - filestem for cut grids
 region     - x_min/x_max/y_min/y_max (e.g. 0/10000/20000/40000
 ```
 
+
 If you wish to cut the interferograms to match a specific bounding area (i.e. from another track or satellite) follow these steps:
 
 1. Project an example interferogram file from the "template" frame to geographic coordinates using ```proj_ra2ll.csh```:
@@ -115,21 +116,8 @@ Usage: proj_ll2ra.csh trans.dat phase_ll.grd phase_ra.grd
 ```
 Note that this ```trans.dat``` should be from the ```F*/topo``` directories of the target frame.
 
-4. Use ```grdinfo``` to find the bounding coordinates of the template frame in the target coordinate system. For example:
+4. Use ```grdinfo``` to find the bounding coordinates of the template frame in the target coordinate system and pass to ```batch_cut.csh``` as explained above.
 ```
-class239@firkin:20160116_20160227 167> grdinfo phase.grd
-phase.grd: Title: Produced by grdmath
-phase.grd: Command: grdmath imagfilt.grd realfilt.grd ATAN2 mask.grd MUL FLIPUD = phase.grd
-phase.grd: Remark: 
-phase.grd: Pixel node registration used [Cartesian grid]
-phase.grd: Grid file format: nf = GMT netCDF format (32-bit float), CF-1.7
-phase.grd: ```**x_min: 0 x_max: 5772**``` x_inc: 6 name: x n_columns: 962
-phase.grd: ```**y_min: 0 y_max: 174132**``` y_inc: 36 name: y n_rows: 4837
-phase.grd: z_min: -3.14159059525 z_max: 3.14159226418 name: z
-phase.grd: scale_factor: 1 add_offset: 0
-phase.grd: format: classic
-```
-
 
 
 ### Step 6: merge the filtered phase, correlation and mask grid files
