@@ -99,3 +99,5 @@
     cd $now_dir
 
   end
+
+  rm -f */tmp*
