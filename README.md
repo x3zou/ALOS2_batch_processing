@@ -119,7 +119,7 @@ Note that this ```trans.dat``` should be from the ```F*/topo``` directories of t
 4. Use ```grdinfo``` to find the bounding coordinates of the template frame in the target coordinate system and pass to ```batch_cut.csh``` as explained above.
 
 
-### Step 6: merge the filtered phase, correlation and mask grid files
+### Step 6: merge the filtered phase, correlation, and mask grid files
 ```shell
 merge_swath_ALOS2_list.csh  dir.list  dates.run  batch.config
 # this command generate the necessary file list that will be used in merge_batch.csh
