@@ -129,8 +129,10 @@ merge_swath_ALOS2_list.csh  dir.list  dates.run  batch.config
 # ../F3/intf
 # ...
 # dates.run are date pairs between reference and repeat interferograms.
+# Note: this command will also prepare directories and input files for each subband if using the split-spectrum ionosphere correction.
 
 merge_batch_five.csh  inputfile  batch.config file_type
+# Run in ```merge``` directory for standard processing. For the split-spectrum method, run in ```merge/intf*```
 # input file is generated from executing merge_swath_ALOS2_list.csh
 # file_type is the file stem of the grd file to be merged (e.g. phasefilt, phaseraw)
 # the merging step would also generate merged "trans.dat" to be used in geocoding.
