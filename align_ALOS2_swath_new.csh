@@ -1,20 +1,15 @@
 #!/bin/tcsh -f
 # modified by Zeyu Jin on Jan. 2019
-# modified by Ellis Vavra on Dec. 2020
 # align all the slave image to the supermaster
 # due to the precise orbit, all the interferograms
 # could be generated with the reference and repeat images
 
 if ($#argv != 3) then
   echo ""
-  echo "Align stack of SLCs to supermaster scene"
-  echo ""
-  echo "Usage: align_ALOS2_swath_new.csh  align.in  n_swath  config_file"
-  echo ""
-  echo "Inputs: "
-  echo "  align.in    - list of IMG filestems. First scene should correspond to supermaster."
-  echo "  n_swath     - number of swath to process"
-  echo "  config_file - batch configuration file (example in repository)"
+  echo "align_ALOS2_swath.csh  align.in  n_swath  config.alos.txt"
+  echo "The first line of align.in is the supermaster"
+  echo "IMG-HH-ALOS2129992850-161019-WBDR1.1__D"
+  echo "..."
   echo ""
   exit 1
 endif
@@ -23,28 +18,14 @@ set align_list = $1
 set subswath = $2
 set conf = $3
 set iono = `grep correct_iono $conf | awk '{print $3}'`
-
-# Move into subswath directory
-if (-f F$subswath) then
-   echo "F$subswath exists"
-else
-   echo "Making F$subswath directory"
-   mkdir -p F$subswath
-endif
-
 cd F$subswath
 cp ../$align_list .
 
 mkdir -p intf SLC
-mkdir -p SLC_L
-mkdir -p SLC_H
-
-# mkdir -p intf SLC
-# if ($iono == 1) then
-#    mkdir -p SLC_L
-#    mkdir -p SLC_H
-# endif
-
+if ($iono == 1) then
+   mkdir -p SLC_L
+   mkdir -p SLC_H
+endif
 cleanup.csh SLC
 rm -rf SLC_L/*
 rm -rf SLC_H/*
@@ -59,53 +40,31 @@ cd SLC
 cp ../../raw/$master.PRM .
 ln -sf ../../raw/$master.SLC .
 ln -sf ../../raw/$master.LED .
-
 # upsampling is the key
 samp_slc.csh $master 3350 0
 if ($iono == 1) then
    split_spectrum $master.PRM > params1
    mv SLCH ../SLC_H/$master.SLC
    mv SLCL ../SLC_L/$master.SLC
+
+   # put this part inside if/endif, otherwise stopped
+   cd ../SLC_L
+   set wl1 = `grep low_wavelength ../SLC/params1 | awk '{print $3}'`
+   cp ../SLC/$master.PRM .
+   ln -s ../../raw/$master.LED .
+   sed "s/.*wavelength.*/radar_wavelength    = $wl1/g" $master.PRM > tmp
+   mv tmp $master.PRM
+
+   cd ../SLC_H
+   set wh1 = `grep high_wavelength ../SLC/params1 | awk '{print $3}'`
+   cp ../SLC/$master.PRM .
+   ln -s ../../raw/$master.LED .
+   sed "s/.*wavelength.*/radar_wavelength    = $wh1/g" $master.PRM > tmp
+   mv tmp $master.PRM
+
 endif
 
-cd ../SLC_L
-set wl1 = `grep low_wavelength ../SLC/params1 | awk '{print $3}'`
-cp ../SLC/$master.PRM .
-ln -s ../../raw/$master.LED .
-sed "s/.*wavelength.*/radar_wavelength    = $wl1/g" $master.PRM > tmp
-mv tmp $master.PRM
-
-cd ../SLC_H
-set wh1 = `grep high_wavelength ../SLC/params1 | awk '{print $3}'`
-cp ../SLC/$master.PRM .
-ln -s ../../raw/$master.LED .
-sed "s/.*wavelength.*/radar_wavelength    = $wh1/g" $master.PRM > tmp
-mv tmp $master.PRM
-
 cd ..
-
-# samp_slc.csh $master 3350 0
-# if ($iono == 1) then
-#    split_spectrum $master.PRM > params1
-#    mv SLCH ../SLC_H/$master.SLC
-#    mv SLCL ../SLC_L/$master.SLC
-
-#    cd ../SLC_L
-#    set wl1 = `grep low_wavelength ../SLC/params1 | awk '{print $3}'`
-#    cp ../SLC/$master.PRM .
-#    ln -s ../../raw/$master.LED .
-#    sed "s/.*wavelength.*/radar_wavelength    = $wl1/g" $master.PRM > tmp
-#    mv tmp $master.PRM
-
-#    cd ../SLC_H
-#    set wh1 = `grep high_wavelength ../SLC/params1 | awk '{print $3}'`
-#    cp ../SLC/$master.PRM .
-#    ln -s ../../raw/$master.LED .
-#    sed "s/.*wavelength.*/radar_wavelength    = $wh1/g" $master.PRM > tmp
-#    mv tmp $master.PRM
-
-#    cd ..
-# endif
 
 # coregister all images to one supermaster
 # sample to the same PRF
