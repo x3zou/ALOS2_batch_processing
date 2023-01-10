@@ -94,7 +94,6 @@ new_file   - filestem for cut grids
 region     - x_min/x_max/y_min/y_max (e.g. 0/10000/20000/40000
 ```
 
-
 If you wish to cut the interferograms to match a specific bounding area (i.e. from another track or satellite) follow these steps:
 
 1. Project an example interferogram file from the "template" frame to geographic coordinates using ```proj_ra2ll.csh```:
@@ -119,7 +118,7 @@ Note that this ```trans.dat``` should be from the ```F*/topo``` directories of t
 4. Use ```grdinfo``` to find the bounding coordinates of the template frame in the target coordinate system and pass to ```batch_cut.csh``` as explained above.
 
 
-### Step 6: merge the filtered phase, correlation and mask grid files
+### Step 6: merge the filtered phase, correlation, and mask grid files
 ```shell
 merge_swath_ALOS2_list.csh  dir.list  dates.run  batch.config
 # this command generate the necessary file list that will be used in merge_batch.csh
@@ -129,8 +128,10 @@ merge_swath_ALOS2_list.csh  dir.list  dates.run  batch.config
 # ../F3/intf
 # ...
 # dates.run are date pairs between reference and repeat interferograms.
+# Note: this command will also prepare directories and input files for each subband if using the split-spectrum ionosphere correction.
 
 merge_batch_five.csh  inputfile  batch.config file_type
+# Run in ```merge``` directory for standard processing. For the split-spectrum method, run in ```merge/intf*```
 # input file is generated from executing merge_swath_ALOS2_list.csh
 # file_type is the file stem of the grd file to be merged (e.g. phasefilt, phaseraw)
 # the merging step would also generate merged "trans.dat" to be used in geocoding.
@@ -140,6 +141,28 @@ You need to run "merge_swath" twice. To merge the topo_ra.grd, you need to
 consider two extra factors:**
 1. gmt FLIPUD each topo_ra.grd of each subswath (Because SLC indexs from upper left).
 2. subtract the difference of Earth radius of each subswath.
+
+### Optional: Mask water
+For regions containing large bodies of water, it is usually a good idea to generate a mask file using:
+```
+landmask.csh region_cut
+# region_cut - x_min/x_max/y_min/y_max in radar coordinates.
+# Requires dem.grd, trans.dat to be in current directory 
+```
+
+If a single subswath is used, run ```landmask.csh``` in its respective ```/topo``` directory. If merging has been performed, it can instead be be performed in the ```/merge``` directory. 
+
+In either case, it must be made sure that the grid dimesions are consistent with the corresponding ```phase*.grd``` file(s). This can be done by running
+  ```
+  gmt grdsample  landmask_ra.grd -Rntf_path/phasefilt.grd -Glandmask_ra_filt.grd
+  ```
+for the filtered phase interferograms. For the raw phase,
+  ```
+  gmt grdsample  landmask_ra.grd -Rintf_path/phaseraw.grd -Glandmask_ra_raw.grd
+  ```
+  
+In both cases, ```pair``` is an interferogram directory (in ```F*/intf``` or ```/merge``` typically).
+
 
 ### Step 7: unwrap each interferogram and geocode them.
 ```shell

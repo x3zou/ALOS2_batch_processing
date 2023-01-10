@@ -33,6 +33,9 @@
     exit 1
   endif
 
+  # Delete old tmp files
+  rm -f */tmp*
+  
   if (! -f dem.grd) then
     echo "dem.grd is required ..."
     exit 1
