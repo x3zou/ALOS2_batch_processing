@@ -6,13 +6,14 @@
 ---
 
 ### Step 0: add current cshell path to `~/.bashrc` or `~/.cshrc`.
+create /raw /topo directories.
 
 ### Step 1: convert the original data (CEOS format) to SLC and LED formats:
 ```shell
 pre_proc_ALOS2_batch.csh  LED.list  batch.config  [n1]  [n2]
 # n1 and n2 represent the range of ALOS-2 subswaths to process (n2 >= n1)
 # Run from top-level processing directory
-# LED.list should be in /raw, 
+# LED.list is the list of all LED files and it should be in /raw, 
 # batch.config should parallel to /raw, /topo, etc.
 
 # This will generate a top-level /SLC directory which contains all of the pre-processed data
@@ -25,8 +26,9 @@ At this time, you may want to check the ```baseline_table.dat``` file to identif
 ```shell
 align_ALOS2_swath_new.csh  align.in  n_swath  batch.config
 # The first line of align.in should be the supermaster file
-# n_swath is the ALOS-2 subswath to align (must do one at a time)
+# n_swath is the ALOS-2 subswath to align. Can run multiple swaths in parallel, but be careful with running to many.
 # align.in should parallel to /raw, /topo, etc.
+# type align_ALOS2_swath_new.csh in terminal to see a sample align.in file.
 
 # This will generate a new /F[1-5] directory for the subswath being processed. 
 # It will be populated with another /SLC directory which will contain the aligned SLCs 
@@ -122,12 +124,13 @@ Note that this ```trans.dat``` should be from the ```F*/topo``` directories of t
 ```shell
 merge_swath_ALOS2_list.csh  dir.list  dates.run  batch.config
 # this command generate the necessary file list that will be used in merge_batch.csh
+# make a merge directory parallel to raw and topo.
 # dir.list in the form of directory of each subswath:
 # ../F1/intf
 # ../F2/intf
 # ../F3/intf
 # ...
-# dates.run are date pairs between reference and repeat interferograms.
+# dates.run are date pairs between reference and repeat interferograms. See the name of each date pair dirctory under intf for example.
 # Note: this command will also prepare directories and input files for each subband if using the split-spectrum ionosphere correction.
 
 merge_batch_five.csh  inputfile  batch.config file_type
