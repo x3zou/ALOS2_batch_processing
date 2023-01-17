@@ -124,7 +124,8 @@ Note that this ```trans.dat``` should be from the ```F*/topo``` directories of t
 ```shell
 merge_swath_ALOS2_list.csh  dir.list  dates.run  batch.config
 # this command generate the necessary file list that will be used in merge_batch.csh
-# make a merge directory parallel to raw and topo.
+# make a merge directory parallel to raw and topo and run the file in merge.
+# don't forget to link the essential files, use ln -s dem.grd, etc.
 # dir.list in the form of directory of each subswath:
 # ../F1/intf
 # ../F2/intf
