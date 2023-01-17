@@ -25,10 +25,10 @@ At this time, you may want to check the ```baseline_table.dat``` file to identif
 ### Step 2: align all slave images to the supermaster image.
 ```shell
 align_ALOS2_swath_new.csh  align.in  n_swath  batch.config
-# The first line of align.in should be the supermaster file
-# n_swath is the ALOS-2 subswath to align. Can run multiple swaths in parallel, but be careful with running to many.
+# The first line of align.in should be the supermaster file. Type align_ALOS2_swath_new.csh directly in terminal to see a sample align.in file.
+# n_swath is the ALOS-2 subswath to align. Can run multiple swaths in parallel, but be careful with running to many at the same time.
 # align.in should parallel to /raw, /topo, etc.
-# type align_ALOS2_swath_new.csh in terminal to see a sample align.in file.
+
 
 # This will generate a new /F[1-5] directory for the subswath being processed. 
 # It will be populated with another /SLC directory which will contain the aligned SLCs 
@@ -39,7 +39,7 @@ we upsample each SLC file to enforce each subswath to have the same
 range sampling rate and PRF (azimuth) (using "samp_slc.csh").**
 
 
-### Step 3: generate "topo_ra.grd" and "trans.dat" for each subswath.
+### Step 3: generate "topo_ra.grd" and "trans.dat" for each subswath (run it in the top-level directory)
 ``` shell
 dem2topo_ra_swath.csh  n_swath  batch.config
 ```
