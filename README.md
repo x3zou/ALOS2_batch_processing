@@ -139,6 +139,7 @@ merge_batch_five.csh  inputfile  batch.config file_type
 # input file is generated from executing merge_swath_ALOS2_list.csh
 # file_type is the file stem of the grd file to be merged (e.g. phasefilt, phaseraw)
 # the merging step would also generate merged "trans.dat" to be used in geocoding.
+#Please remember to go into the code to check how many sub-swath is used for merging (default for now is set to 5)
 ```
 **Merging subswaths of ALOS-2 is similar to merging those of Sentinel-1.
 You need to run "merge_swath" twice. To merge the topo_ra.grd, you need to
