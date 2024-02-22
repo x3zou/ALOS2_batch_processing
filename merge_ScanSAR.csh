@@ -81,9 +81,12 @@
   merge_swath first_file.txt first_file.grd first
 
   # used for Pamir region (merge 4 subswaths)
-  echo "first.PRM:first_file.grd" > second_file.txt
-  tail -1 tmp_filelist >> second_file.txt
+  #echo "first.PRM:first_file.grd" > second_file.txt
+  #tail -1 tmp_filelist >> second_file.txt
 
+  #Used for general purpose (merge 5 subswaths)
+  echo "first.PRM:first_file.grd" > second_file.txt
+  tail -2 tmp_filelist >> second_file.txt
   merge_swath second_file.txt $file_type.grd $stem
   
   echo "Merging END"
