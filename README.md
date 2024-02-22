@@ -135,7 +135,7 @@ merge_swath_ALOS2_list.csh  dir.list  dates.run  batch.config
 # Note: this command will also prepare directories and input files for each subband if using the split-spectrum ionosphere correction.
 
 merge_batch_five.csh  inputfile  batch.config file_type
-# Make sure merge_batch_five.csh and merge_ScanSAR.csh are in the same path. Use 'setenv PATH /home/class239/work/ellis/Codes/ALOS2_batch_processing:"$PATH" ' to enforce it, or write your own .xxrc file
+## Make sure merge_batch_five.csh and merge_ScanSAR.csh are in the same path. Use 'setenv PATH /home/class239/work/xiaoyu/ALOS2_batch_processing:"$PATH" ' to enforce it, or write your own .xxrc file
 # Run in ```merge``` directory for standard processing. For the split-spectrum method, run in ```merge/intf*```
 # input file is generated from executing merge_swath_ALOS2_list.csh
 # file_type is the file stem of the grd file to be merged (e.g. phasefilt, phaseraw)
